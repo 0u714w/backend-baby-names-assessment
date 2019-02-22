@@ -52,10 +52,10 @@ def extract_names(filename):
     open_html = codecs.open(filename, 'r')
 
     for line in open_html:
-        ranks = re.findall(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>', line)
-        for rank in ranks:
-            names.append(rank[1] + ' ' + rank[0])
-            names.append(rank[2] + ' ' + rank[0])
+        name_and_rank = re.findall(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>', line)
+        for item in name_and_rank:
+            names.append(item[1] + ' ' + item[0])
+            names.append(item[2] + ' ' + item[0])
     return '\n'.join(sorted(names)) + '\n'
 
 
