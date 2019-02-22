@@ -13,6 +13,7 @@
 import sys
 import re
 import argparse
+import codecs
 
 """
 Define the extract_names() function below and change main()
@@ -45,8 +46,17 @@ def extract_names(filename):
     followed by the name-rank strings in alphabetical order.
     ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
     """
-    # +++your code here+++
-    return
+
+    year = filename[4:8]
+    names = [year]
+    open_html = codecs.open(filename, 'r')
+
+    for line in open_html:
+        ranks = re.findall(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>', line)
+        for rank in ranks:
+            names.append(rank[1] + ' ' + rank[0])
+            names.append(rank[2] + ' ' + rank[0])
+    return '\n'.join(sorted(names)) + '\n'
 
 
 def create_parser():
@@ -68,12 +78,17 @@ def main():
         parser.print_usage()
         sys.exit(1)
 
+    create_summary = args.summaryfile
     file_list = args.files
 
-    # option flag
-    create_summary = args.summaryfile
+    if create_summary:
+        for filename in file_list:
+            with open(filename + '.summary', 'w') as f:
+                f.write(extract_names(filename))
+    else:
+        for filename in file_list:
+            print(extract_names(filename))
 
-    # +++your code here+++
     # For each filename, get the names, then either print the text output
     # or write it to a summary file
 
